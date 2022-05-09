@@ -17,7 +17,7 @@ import java.util.Optional;
 import static org.mockito.ArgumentMatchers.any;
 
 @SpringBootTest
-public class UserServiceTest {
+class UserServiceTest {
 
   @MockBean
   UserPersistencePort userPersistencePort;
@@ -52,7 +52,7 @@ public class UserServiceTest {
 
     final var loginSuccesfull = userServicePort.loginUser(LoginDto.builder().user("jesusangel93").password("passwordsegura").build());
 
-    Assertions.assertEquals(loginSuccesfull, true);
+    Assertions.assertEquals(true, loginSuccesfull);
 
   }
 

@@ -22,7 +22,7 @@ import java.util.Optional;
 import static org.mockito.ArgumentMatchers.any;
 
 @SpringBootTest
-public class WalletControllerTest {
+class WalletControllerTest {
 
   @MockBean
   UserServicePort userServicePort;

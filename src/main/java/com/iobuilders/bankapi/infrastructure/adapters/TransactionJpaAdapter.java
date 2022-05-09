@@ -9,7 +9,6 @@ import com.iobuilders.bankapi.infrastructure.repository.WalletsRepository;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -28,7 +27,6 @@ public class TransactionJpaAdapter implements TransactionPersistencePort {
   }
 
   @Override
-  @Transactional
   public TransactionDto saveTransaction(String wallet, TransactionDto transaction) {
 
     final var transactionEntity = TransactionMapper.INSTANCE.transactionDtoToTransaction(transaction);

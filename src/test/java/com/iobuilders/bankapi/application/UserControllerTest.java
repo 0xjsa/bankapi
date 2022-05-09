@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 
 @SpringBootTest
-public class UserControllerTest {
+class UserControllerTest {
 
   @MockBean
   UserServicePort userServicePort;

@@ -1,6 +1,7 @@
 package com.iobuilders.bankapi.domain;
 
 import com.iobuilders.bankapi.domain.dtos.DepositDto;
+import com.iobuilders.bankapi.domain.dtos.TransactionDto;
 import com.iobuilders.bankapi.domain.dtos.UserDto;
 import com.iobuilders.bankapi.domain.dtos.WalletDto;
 import com.iobuilders.bankapi.domain.ports.api.WalletsServicePort;
@@ -23,7 +24,7 @@ import java.util.Optional;
 import static org.mockito.ArgumentMatchers.any;
 
 @SpringBootTest
-public class WalletServiceTest {
+class WalletServiceTest {
 
   @MockBean
   WalletsPersistencePort walletsPersistencePort;
@@ -52,27 +53,40 @@ public class WalletServiceTest {
   }
 
   @Test
-  void createDepositInsufficientBalance(){
+  void createDepositTest(){
+
     final var wallet = RandomStringUtils.random(35, true, true);
+
+    final var depositDto = TransactionDto.builder()
+      .amount(BigDecimal.TEN)
+      .destinationWallet(wallet)
+      .originWallet("DEPOSITO")
+      .build();
 
     Mockito.when(walletsPersistencePort.findById(wallet)).thenReturn(
       Optional.of(
         WalletDto.builder()
           .address(wallet)
           .balance(BigDecimal.ZERO)
-        .build()));
+          .build()));
 
+    Mockito.when(walletsPersistencePort.saveWallet(WalletDto.builder()
+        .address(wallet)
+        .balance(BigDecimal.TEN)
+        .build()
+      )
+    ).thenReturn(Optional.of(WalletDto.builder().address(wallet).balance(BigDecimal.TEN).build()));
 
-    final var result =  walletsServicePort.createDeposit(DepositDto.builder().amount(BigDecimal.TEN).build());
+    Mockito.when(transactionPersistencePort.saveTransaction(wallet,depositDto)).thenReturn(depositDto);
+
+    final var result =  walletsServicePort.createDeposit(
+      DepositDto.builder()
+        .address(wallet)
+        .amount(BigDecimal.TEN)
+        .build());
+
+    Assertions.assertNotNull(result);
+    Assertions.assertEquals(BigDecimal.TEN, result.get().getAmount());
   }
-//
-//  @Test
-//  void getHistory(){
-//
-//  }
-//
-//  @Test
-//  void transfer(){
-//
-//  }
+
 }
